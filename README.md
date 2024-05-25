@@ -37,3 +37,11 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Deploying to GitHub Pages
+
+```sh
+npm run deploy
+```
+
+Set up deployments using [this guide](https://medium.com/@aishwaryaparab1/deploying-vite-deploying-vite-app-to-github-pages-166fff40ffd3).
