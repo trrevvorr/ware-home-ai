@@ -29,6 +29,7 @@
                     placeholder="Type your message..."
                 />
             </div>
+            <div class="chin"></div>
         </div>
     </div>
 </template>
@@ -58,7 +59,6 @@ export default {
     },
     watch: {
         messages(newMessages?: Message[], oldMessages?: Message[]) {
-            console.log("new message: " + (newMessages?.length && newMessages[0].id));
             const mostRecentNewMessage = newMessages && newMessages[0];
             const mostRecentOldMessage = oldMessages && oldMessages[0];
             if (
@@ -107,6 +107,7 @@ export default {
 
 .messages {
     overflow-y: auto;
+    overscroll-behavior-y: contain;
     border-bottom: 1px solid white;
     padding: 0 1rem;
 }
@@ -166,12 +167,15 @@ input {
 .input-container {
     width: 100%;
     padding: 0.5rem 1rem;
-    padding-bottom: 3rem;
 }
 
 .input-container input {
     display: block;
     width: 100%;
     border: none;
+}
+
+.chin {
+    height: 1rem;
 }
 </style>
