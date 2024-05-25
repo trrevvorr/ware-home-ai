@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="modal-content">
-      <h2>Enter OpenAI Settings</h2>
+      <h2>OpenAI Credentials</h2>
       <input v-model="secret" placeholder="OpenAI Secret Key" />
       <input v-model="assistantId" placeholder="Assistant ID" />
       <input v-model="threadId" placeholder="Thread ID" />
@@ -46,6 +46,7 @@ export default {
 
 .modal-content {
   background: white;
+  color: black;
   padding: 20px;
   border-radius: 4px;
   text-align: center;
