@@ -166,6 +166,7 @@ input {
 .input-container {
     width: 100%;
     padding: 0.5rem 1rem;
+    padding-bottom: 3rem;
 }
 
 .input-container input {
