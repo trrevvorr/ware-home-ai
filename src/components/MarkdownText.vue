@@ -17,7 +17,7 @@
     data() {
       return {
         md: new MarkdownIt(),
-        compiledMarkdown: null,
+        compiledMarkdown: "",
       };
     },
     created() {

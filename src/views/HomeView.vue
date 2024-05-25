@@ -6,10 +6,9 @@
 </template>
 
 <script lang="ts">
-import { ref, nextTick } from "vue";
-import { useSettingsStore } from "../stores/settings";
-import SettingsModal from "../components/SettingsModal.vue";
-import ThreadInterface from "../components/ThreadInterface.vue";
+import { useSettingsStore } from "@/stores/settings";
+import SettingsModal from "@/components/SettingsModal.vue";
+import ThreadInterface from "@/components/ThreadInterface.vue";
 
 export default {
     name: "HomeView",
