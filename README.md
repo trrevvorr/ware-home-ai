@@ -45,3 +45,9 @@ npm run deploy
 ```
 
 Set up deployments using [this guide](https://medium.com/@aishwaryaparab1/deploying-vite-deploying-vite-app-to-github-pages-166fff40ffd3).
+
+## Updating PWA Assets
+
+```sh
+npm run create-pwa-assets
+```
