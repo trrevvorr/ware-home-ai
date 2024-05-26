@@ -1,42 +1,46 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
+import { useThreadStore } from "./thread";
 
 export interface SettingsState {
-  secret: string;
-  assistantId: string;
-  threadId: string;
-  displayForced: boolean;
+    secret: string;
+    assistantId: string;
+    threadId: string;
+    displayForced: boolean;
 }
 
-export const useSettingsStore = defineStore('settings', {
-  state: (): SettingsState => ({
-    secret: localStorage.getItem('openaiSecret') || '',
-    assistantId: localStorage.getItem('assistantId') || '',
-    threadId: localStorage.getItem('threadId') || '',
-    displayForced: false
-  }),
-  getters: {
-    requiredDataProvided(state): boolean {
-        return !!state.secret.trim() && !!state.assistantId.trim() && !!state.threadId.trim();
+export const useSettingsStore = defineStore("settings", {
+    state: (): SettingsState => ({
+        secret: localStorage.getItem("openaiSecret") || "",
+        assistantId: localStorage.getItem("assistantId") || "",
+        threadId: localStorage.getItem("threadId") || "",
+        displayForced: false,
+    }),
+    getters: {
+        requiredDataProvided(state): boolean {
+            return !!state.secret.trim() && !!state.assistantId.trim() && !!state.threadId.trim();
+        },
+        displaySettings(state): boolean {
+            return !this.requiredDataProvided || state.displayForced;
+        },
     },
-    displaySettings(state): boolean {
-      return !this.requiredDataProvided || state.displayForced;
-  },
-  },
-  actions: {
-    setSettings(secret: string, assistantId: string, threadId: string) {
-      this.secret = secret;
-      this.assistantId = assistantId;
-      this.threadId = threadId;
-      localStorage.setItem('openaiSecret', secret);
-      localStorage.setItem('assistantId', assistantId);
-      localStorage.setItem('threadId', threadId);
-      this.displayForced = false;
+    actions: {
+        setSettings(secret: string, assistantId: string, threadId: string) {
+            this.secret = secret;
+            this.assistantId = assistantId;
+            this.threadId = threadId;
+            localStorage.setItem("openaiSecret", secret);
+            localStorage.setItem("assistantId", assistantId);
+            localStorage.setItem("threadId", threadId);
+            this.displayForced = false;
+
+            const threadStore = useThreadStore();
+            threadStore.loadMessages(true);
+        },
+        cancelSettings() {
+            this.displayForced = false;
+        },
+        forceSettingsDisplay() {
+            this.displayForced = true;
+        },
     },
-    cancelSettings() {
-      this.displayForced = false;
-    },
-    forceSettingsDisplay() {
-      this.displayForced = true;
-    }
-  },
 });

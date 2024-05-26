@@ -109,9 +109,13 @@ export const useThreadStore = defineStore("thread", {
         },
     },
     actions: {
-        async loadMessages() {
+        async loadMessages(clearOldMessages?: boolean) {
             const settingsStore = useSettingsStore();
             const { secret, threadId } = settingsStore;
+
+            if (clearOldMessages) {
+                this.messages = [];
+            }
 
             if (!secret || !threadId) {
                 throw new Error("Not initialized");
