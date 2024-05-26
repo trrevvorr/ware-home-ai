@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/ware-home-ai/sw.js', { scope: '/ware-home-ai/' })})}
