@@ -11,13 +11,12 @@
     "predeploy": "npm run build",
     "preview": "vite preview",
     "type-check": "vue-tsc --build --force",
-    "create-pwa-assets": "pwa-asset-generator icon.webp ./public/assets -i ./index.html -m ./manifest.json -f -d -b \"#000\" -p \"0\"" 
+    "create-pwa-assets": "pwa-asset-generator icon.webp ./public/assets -i ./index.html -m ./manifest.json -f -d -b \"#000\" -p \"0\""
   },
   "dependencies": {
     "markdown-it": "^14.1.0",
     "pinia": "^2.1.7",
     "pwa-asset-generator": "^6.3.1",
-    "register-service-worker": "^1.7.2",
     "uuid": "^9.0.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
@@ -38,6 +37,7 @@
     "npm-run-all2": "^6.1.2",
     "typescript": "~5.4.0",
     "vite": "^5.2.8",
+    "vite-plugin-pwa": "^0.20.0",
     "vue-tsc": "^2.0.11"
   },
   "homepage": "https://trrevvorr.github.io/ware-home-ai/",
