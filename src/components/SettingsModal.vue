@@ -5,18 +5,35 @@
       <input v-model="secret" placeholder="OpenAI Secret Key" />
       <input v-model="assistantId" placeholder="Assistant ID" />
       <input v-model="threadId" placeholder="Thread ID" />
-      <button @click="saveSettings">Save</button>
+      <div class="buttons">
+        <button @click="saveSettings">Save</button>
+        <button @click="cancelSettings">Cancel</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    initialSecret: {
+        type: String,
+        required: true
+      },
+    initialAssistantId: {
+        type: String,
+        required: true
+      },
+    initialThreadId: {
+        type: String,
+        required: true
+      },
+  },
   data() {
     return {
-      secret: '',
-      assistantId: '',
-      threadId: '',
+      secret: this.initialSecret,
+      assistantId: this.initialAssistantId,
+      threadId: this.initialThreadId,
     };
   },
   methods: {
@@ -26,6 +43,9 @@ export default {
         assistantId: this.assistantId,
         threadId: this.threadId,
       });
+    },
+    cancelSettings() {
+      this.$emit('cancel-settings');
     },
   },
 };
@@ -42,6 +62,23 @@ export default {
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.buttons button{
+    color: white;
+    height: 2rem;
+    background: black;
+    border: none;
+    outline: none;
+    border-radius: 1rem;
 }
 
 .modal-content {
@@ -50,6 +87,7 @@ export default {
   padding: 20px;
   border-radius: 4px;
   text-align: center;
+  border-radius: 1rem;
 }
 
 input {

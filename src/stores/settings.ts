@@ -4,6 +4,7 @@ export interface SettingsState {
   secret: string;
   assistantId: string;
   threadId: string;
+  displayForced: boolean;
 }
 
 export const useSettingsStore = defineStore('settings', {
@@ -11,7 +12,16 @@ export const useSettingsStore = defineStore('settings', {
     secret: localStorage.getItem('openaiSecret') || '',
     assistantId: localStorage.getItem('assistantId') || '',
     threadId: localStorage.getItem('threadId') || '',
+    displayForced: false
   }),
+  getters: {
+    requiredDataProvided(state): boolean {
+        return !!state.secret.trim() && !!state.assistantId.trim() && !!state.threadId.trim();
+    },
+    displaySettings(state): boolean {
+      return !this.requiredDataProvided || state.displayForced;
+  },
+  },
   actions: {
     setSettings(secret: string, assistantId: string, threadId: string) {
       this.secret = secret;
@@ -20,6 +30,13 @@ export const useSettingsStore = defineStore('settings', {
       localStorage.setItem('openaiSecret', secret);
       localStorage.setItem('assistantId', assistantId);
       localStorage.setItem('threadId', threadId);
+      this.displayForced = false;
     },
+    cancelSettings() {
+      this.displayForced = false;
+    },
+    forceSettingsDisplay() {
+      this.displayForced = true;
+    }
   },
 });
