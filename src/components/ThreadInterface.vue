@@ -19,17 +19,22 @@
                     </div>
                 </div>
                 <span ref="bottom"></span>
+                <div class="spacer">
+                    <div ref="refresh" class="pull-to-refresh">
+                        {{ `${refreshTriggered ? "Release" : "Pull"} to refresh` }}
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="input-container">
+        <div class="input-container" ref="input_container">
             <div class="input-container-inner">
                 <input
                     v-model="newMessage"
                     @keyup.enter="sendMessage"
                     placeholder="Type your message..."
+                    ref="input"
                 />
             </div>
-            <div class="chin"></div>
         </div>
     </div>
 </template>
@@ -49,10 +54,27 @@ export default {
         return {
             newMessage: "",
             threadStore: useThreadStore(),
+            observer: null as IntersectionObserver | null,
+            refreshTriggeredTimeout: undefined as number | undefined,
+            refreshTriggered: false,
         };
     },
     created() {
         this.threadStore.loadMessages().then(() => this.scrollToBottom(false));
+    },
+    mounted() {
+        (this.$refs.input as HTMLElement).focus();
+        this.observer = new IntersectionObserver(this.handleIntersection, {
+            root: null,
+            threshold: 1,
+            rootMargin: `-${(this.$refs.input_container as HTMLElement).offsetHeight + 10}px`,
+        });
+
+        this.observer.observe(this.$refs.refresh as Element);
+    },
+    beforeUnmount() {
+        clearTimeout(this.refreshTriggeredTimeout);
+        this.observer && this.observer.disconnect();
     },
     computed: {
         ...mapState(useThreadStore, ["messages", "messageGroups", "runStatus", "runDuration"]),
@@ -69,6 +91,12 @@ export default {
                 this.scrollToBottom(true);
             }
         },
+        refreshTriggered(newTriggered) {
+            console.info("refresh triggered", newTriggered);
+            if (!newTriggered) { // must release before refresh occurs
+                this.threadStore.loadMessages();
+            }
+        }
     },
     methods: {
         async sendMessage() {
@@ -93,23 +121,42 @@ export default {
         messageClass(message: Message) {
             return message.role === "user" ? "user-message" : "bot-message";
         },
+        handleIntersection(entries: IntersectionObserverEntry[]) {
+            // add delay to prevent unintentional overscroll triggering refresh
+            if (!!entries.length && entries[0].isIntersecting) {
+                this.refreshTriggeredTimeout = setTimeout(() => {
+                    this.refreshTriggeredTimeout = undefined;
+                    this.refreshTriggered = true;
+                }, 500);
+            } else {
+                clearTimeout(this.refreshTriggeredTimeout);
+                this.refreshTriggeredTimeout = undefined;
+                this.refreshTriggered = false;
+            }
+
+        },
     },
 };
 </script>
 
 <style scoped>
 .chat-container {
-    display: grid;
-    grid-template-rows: 1fr auto;
-    height: 100vh;
-    width: 100vw;
+    position: relative;
 }
 
 .messages {
+    height: 100vh;
+    width: 100vw;
     overflow-y: auto;
     overscroll-behavior-y: contain;
-    border-bottom: 1px solid white;
     padding: 0 1rem;
+}
+
+.messages::-webkit-scrollbar {
+    display: none;
+}
+.messages {
+    scrollbar-width: none;
 }
 
 .messages-inner {
@@ -165,17 +212,26 @@ input {
 }
 
 .input-container {
+    position: absolute;
+    bottom: 0;
     width: 100%;
     padding: 0.5rem 1rem;
+    height: 3.5rem;
+    background-color: black;
+    border-top: 1px solid white;
+}
+
+.spacer {
+    height: 3.5rem;
+    margin: auto;
+}
+
+.pull-to-refresh {
 }
 
 .input-container input {
     display: block;
     width: 100%;
     border: none;
-}
-
-.chin {
-    height: 1rem;
 }
 </style>
