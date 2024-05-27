@@ -58,8 +58,12 @@
   font-weight: normal;
 }
 
+body, #app {
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+
 body {
-  overscroll-behavior-y: none;
   touch-action: none;
   min-height: 100vh;
   color: var(--color-text);

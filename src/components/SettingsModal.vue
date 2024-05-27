@@ -6,8 +6,8 @@
       <input v-model="assistantId" placeholder="Assistant ID" />
       <input v-model="threadId" placeholder="Thread ID" />
       <div class="buttons">
-        <button @click="saveSettings">Save</button>
         <button @click="cancelSettings">Cancel</button>
+        <button @click="saveSettings">Save</button>
       </div>
     </div>
   </div>
